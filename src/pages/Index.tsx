@@ -121,7 +121,7 @@ const Index = () => {
               <span className="h-1.5 w-1.5 animate-glow rounded-full bg-accent" />
               5000+ позиций в наличии
             </div>
-            <h1 className="font-display text-5xl font-700 uppercase leading-[0.95] tracking-tight md:text-7xl">
+            <h1 className="font-display text-3xl font-700 uppercase leading-[0.95] tracking-tight md:text-5xl">
               Инструмент<br />для производительной<br />и качественной <span className="text-primary text-glow">металлообработки</span>
             </h1>
             <p className="mt-5 max-w-md text-muted-foreground">
