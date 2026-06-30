@@ -144,7 +144,7 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <div className="relative animate-scale-in">
+          <div className="relative animate-scale-in -mt-12">
             <div className="absolute -inset-4 rounded-full bg-primary/20 blur-3xl" />
             <img src={HERO_IMG} alt="Режущий инструмент" className="relative w-full rounded-lg border border-border neon-border" />
           </div>
