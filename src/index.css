@@ -4,33 +4,33 @@
 
 @layer base {
   :root {
-    --background: 220 26% 6%;
-    --foreground: 210 20% 96%;
+    --background: 220 14% 92%;
+    --foreground: 220 20% 10%;
 
-    --card: 220 24% 9%;
-    --card-foreground: 210 20% 96%;
+    --card: 220 12% 97%;
+    --card-foreground: 220 20% 10%;
 
-    --popover: 220 24% 9%;
-    --popover-foreground: 210 20% 96%;
+    --popover: 220 12% 97%;
+    --popover-foreground: 220 20% 10%;
 
-    --primary: 28 100% 55%;
-    --primary-foreground: 220 26% 6%;
+    --primary: 28 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 14%;
-    --secondary-foreground: 210 20% 96%;
+    --secondary: 220 10% 78%;
+    --secondary-foreground: 220 20% 10%;
 
-    --muted: 220 18% 16%;
-    --muted-foreground: 215 14% 58%;
+    --muted: 220 10% 84%;
+    --muted-foreground: 220 10% 38%;
 
-    --accent: 174 100% 45%;
-    --accent-foreground: 220 26% 6%;
+    --accent: 174 70% 36%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 18% 18%;
-    --input: 220 18% 16%;
-    --ring: 28 100% 55%;
+    --border: 220 10% 78%;
+    --input: 220 10% 82%;
+    --ring: 28 100% 50%;
 
     --radius: 0.4rem;
 
@@ -103,22 +103,22 @@
 @layer utilities {
   .grid-bg {
     background-image:
-      linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(var(--border) / 0.7) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.7) 1px, transparent 1px);
     background-size: 44px 44px;
   }
   .text-glow {
-    text-shadow: 0 0 24px hsl(var(--primary) / 0.5);
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.35);
   }
   .neon-border {
     box-shadow:
-      0 0 0 1px hsl(var(--primary) / 0.3),
-      0 0 28px hsl(var(--primary) / 0.18);
+      0 0 0 1px hsl(var(--primary) / 0.4),
+      0 4px 18px hsl(var(--primary) / 0.12);
   }
   .accent-glow {
     box-shadow:
-      0 0 0 1px hsl(var(--accent) / 0.35),
-      0 0 26px hsl(var(--accent) / 0.2);
+      0 0 0 1px hsl(var(--accent) / 0.4),
+      0 4px 18px hsl(var(--accent) / 0.14);
   }
   .clip-tech {
     clip-path: polygon(
