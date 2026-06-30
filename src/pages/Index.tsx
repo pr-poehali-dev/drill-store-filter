@@ -31,7 +31,7 @@ const PRODUCTS: Product[] = [
   { id: 8, name: 'Сверло удлинённое Ø6', sku: 'DR-0600-L', type: 'Сверло', material: 'HSS-Co', brand: 'GARANT', diameter: 6, price: 880, stock: 244 },
 ];
 
-const TYPES = ['Фреза', 'Сверло'];
+const TYPES = ['Фреза', 'Сверло', 'Токарный инструмент', 'Фрезерный инструмент СМП', 'Резьбовой инструмент', 'Канавочный инструмент', 'Инструмент для автоматов продольного точения'];
 const MATERIALS = ['Твердосплав', 'HSS', 'HSS-Co', 'Сталь P6M5'];
 const BRANDS = ['GARANT', 'SECO', 'RUKO', 'BOSCH', 'ЗУБР'];
 
