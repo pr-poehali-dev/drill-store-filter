@@ -122,7 +122,7 @@ const Index = () => {
               5000+ позиций в наличии
             </div>
             <h1 className="font-display text-3xl font-700 uppercase leading-[0.95] tracking-tight md:text-5xl">
-              Инструмент<br />для производительной<br />и качественной <span className="text-primary text-glow">металлообработки</span>
+              Инструмент<br />для производительной<br /><span className="whitespace-nowrap">и качественной <span className="text-primary text-glow">металлообработки</span></span>
             </h1>
             <p className="mt-5 max-w-md text-muted-foreground">
               Фрезы и сверла ведущих брендов. Умный подбор по параметрам, оптовые скидки до 20% и загрузка прайса из Excel.
