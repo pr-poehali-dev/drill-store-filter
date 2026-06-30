@@ -93,8 +93,8 @@ const Index = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded bg-primary neon-border">
-              <Icon name="Drill" size={20} className="text-primary-foreground" />
+            <div className="flex h-9 w-9 items-center justify-center rounded" style={{background: 'hsl(213 94% 48%)'}}>
+              <Icon name="Drill" size={20} className="text-white" />
             </div>
             <div className="leading-none">
               <div className="font-display text-xl font-700 tracking-wide">МЕТАЛЛО<span className="text-primary">РЕЗ</span></div>
@@ -106,7 +106,7 @@ const Index = () => {
               <a key={i} href={`#${i}`} className="transition-colors hover:text-foreground">{i}</a>
             ))}
           </nav>
-          <Button className="font-display uppercase tracking-wider clip-tech">
+          <Button className="font-display uppercase tracking-wider clip-tech text-white" style={{background: 'hsl(213 94% 48%)'}}>
             <Icon name="ShoppingCart" size={16} />
             {totalQty > 0 ? `${totalQty} шт` : 'Корзина'}
           </Button>
@@ -193,7 +193,7 @@ const Index = () => {
             {filtered.map((p) => (
               <div key={p.id} className="group flex flex-col rounded-lg border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/50 hover:neon-border">
                 <div className="mb-3 flex items-start justify-between">
-                  <span className={`rounded px-2 py-0.5 font-mono text-[11px] ${p.type === 'Фреза' ? 'bg-primary/15 text-primary' : 'bg-accent/15 text-accent'}`}>
+                  <span className={`rounded px-2 py-0.5 font-mono text-[11px] ${p.type === 'Фреза' ? 'bg-primary/15 text-primary' : ''}`} style={p.type !== 'Фреза' ? {background: 'hsl(213 94% 48% / 0.12)', color: 'hsl(213 94% 40%)'} : {}}>
                     {p.type}
                   </span>
                   <span className="font-mono text-[11px] text-muted-foreground">{p.stock} шт</span>
@@ -272,7 +272,7 @@ const Index = () => {
                   <span className="font-display uppercase tracking-wider text-muted-foreground">Итого</span>
                   <span className="font-display text-3xl font-700 text-primary text-glow">{ruble(total)}</span>
                 </div>
-                <Button className="mt-5 w-full font-display uppercase tracking-wider clip-tech" size="lg">
+                <Button className="mt-5 w-full font-display uppercase tracking-wider clip-tech text-white" size="lg" style={{background: 'hsl(213 94% 48%)'}}>
                   <Icon name="Send" size={16} /> Оформить заказ
                 </Button>
               </>
