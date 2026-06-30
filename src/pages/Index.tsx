@@ -153,9 +153,35 @@ const Index = () => {
 
       {/* Каталог + фильтр */}
       <section id="Каталог" className="container py-16">
-        <div className="mb-8 flex items-end justify-between">
+        <div className="mb-6 flex items-end justify-between">
           <h2 className="font-display text-3xl font-700 uppercase tracking-wide md:text-4xl">Каталог</h2>
           <div className="font-mono text-sm text-muted-foreground">найдено: {filtered.length}</div>
+        </div>
+
+        {/* Подразделы */}
+        <div className="mb-8 flex flex-wrap gap-2">
+          {[
+            { label: 'Все', value: '' },
+            { label: 'Фрезы', value: 'Фреза' },
+            { label: 'Сверла', value: 'Сверло' },
+            { label: 'Токарные пластины', value: 'Токарный инструмент' },
+            { label: 'Резьбовые пластины', value: 'Резьбовой инструмент' },
+            { label: 'Канавочный инструмент', value: 'Канавочный инструмент' },
+            { label: 'Автоматы прод. точения', value: 'Инструмент для автоматов продольного точения' },
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setTypes(tab.value ? [tab.value] : [])}
+              className={`rounded-full border px-4 py-1.5 font-display text-sm uppercase tracking-wider transition-all ${
+                (tab.value === '' && types.length === 0) || types[0] === tab.value
+                  ? 'border-transparent text-white'
+                  : 'border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+              }`}
+              style={(tab.value === '' && types.length === 0) || types[0] === tab.value ? {background: 'hsl(213 94% 48%)'} : {}}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
