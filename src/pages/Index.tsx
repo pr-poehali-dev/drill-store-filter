@@ -53,9 +53,10 @@ function discountFor(qty: number) {
 const Index = () => {
   const [search, setSearch] = useState('');
   const [types, setTypes] = useState<string[]>([]);
-  const [materials, setMaterials] = useState<string[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [diameter, setDiameter] = useState([0, 20]);
+  const [workLen, setWorkLen] = useState([5, 300]);
+  const [totalLen, setTotalLen] = useState([30, 500]);
   const [cart, setCart] = useState<Record<number, number>>({});
 
   const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
@@ -65,12 +66,11 @@ const Index = () => {
     return PRODUCTS.filter((p) => {
       if (search && !`${p.name} ${p.sku}`.toLowerCase().includes(search.toLowerCase())) return false;
       if (types.length && !types.includes(p.type)) return false;
-      if (materials.length && !materials.includes(p.material)) return false;
       if (brands.length && !brands.includes(p.brand)) return false;
       if (p.diameter < diameter[0] || p.diameter > diameter[1]) return false;
       return true;
     });
-  }, [search, types, materials, brands, diameter]);
+  }, [search, types, brands, diameter, workLen, totalLen]);
 
   const addToCart = (id: number, n = 1) =>
     setCart((c) => ({ ...c, [id]: Math.max(0, (c[id] || 0) + n) }));
@@ -167,7 +167,6 @@ const Index = () => {
             <Input placeholder="Поиск по названию / артикулу" value={search} onChange={(e) => setSearch(e.target.value)} className="mb-5 font-mono" />
 
             <FilterGroup title="Тип" items={TYPES} selected={types} onToggle={(v) => toggle(types, setTypes, v)} />
-            <FilterGroup title="Материал" items={MATERIALS} selected={materials} onToggle={(v) => toggle(materials, setMaterials, v)} />
             <FilterGroup title="Производитель" items={BRANDS} selected={brands} onToggle={(v) => toggle(brands, setBrands, v)} />
 
             <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
@@ -175,6 +174,18 @@ const Index = () => {
               <span className="font-mono text-foreground">{diameter[0]}–{diameter[1]}</span>
             </div>
             <Slider min={0} max={20} step={0.5} value={diameter} onValueChange={setDiameter} className="mt-3" />
+
+            <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
+              <span>Рабочая длина, мм</span>
+              <span className="font-mono text-foreground">{workLen[0]}–{workLen[1]}</span>
+            </div>
+            <Slider min={5} max={300} step={1} value={workLen} onValueChange={setWorkLen} className="mt-3" />
+
+            <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
+              <span>Общая длина, мм</span>
+              <span className="font-mono text-foreground">{totalLen[0]}–{totalLen[1]}</span>
+            </div>
+            <Slider min={30} max={500} step={1} value={totalLen} onValueChange={setTotalLen} className="mt-3" />
           </aside>
 
           {/* Карточки */}
