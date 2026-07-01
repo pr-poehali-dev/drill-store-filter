@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,23 @@ const PRODUCTS: Product[] = [
   { id: 8, name: 'Сверло удлинённое Ø6', sku: 'DR-0600-L', type: 'Сверло', material: 'HSS-Co', brand: 'GARANT', diameter: 6, price: 880, stock: 244 },
 ];
 
+const CATALOG_MENU = [
+  { label: 'Токарная обработка', sub: ['Наружное и внутреннее точение (ISO)', 'Отрезка и обработка канавок', 'Инструмент для ЖД колес'] },
+  { label: 'Точение резьбы', sub: [] },
+  { label: 'Для автоматов продольного точения', sub: [] },
+  { label: 'Минирезцы', sub: [] },
+  { label: 'Сверление', sub: [] },
+  { label: 'Станочная оснастка', sub: [] },
+  { label: 'Фрезы с СМП', sub: [] },
+  { label: 'Твердосплавные фрезы', sub: [] },
+  { label: 'Расточные системы', sub: [] },
+  { label: 'Метчики, резьбофрезы, раскатники', sub: [] },
+  { label: 'Специнструмент', sub: [] },
+  { label: 'Твердосплавные столбики', sub: [] },
+];
+
+const TOP_NAV = ['О компании', 'Новинки', 'Вакансии', 'Тех. информация', 'Видео', 'Контакты'];
+
 const TYPES = ['Фреза', 'Сверло', 'Токарный инструмент', 'Фрезерный инструмент СМП', 'Резьбовой инструмент', 'Канавочный инструмент', 'Инструмент для автоматов продольного точения'];
 const MATERIALS = ['Твердосплав', 'HSS', 'HSS-Co', 'Сталь P6M5'];
 const BRANDS = ['GARANT', 'SECO', 'RUKO', 'BOSCH', 'ЗУБР'];
@@ -58,6 +75,9 @@ const Index = () => {
   const [workLen, setWorkLen] = useState([5, 300]);
   const [totalLen, setTotalLen] = useState([30, 500]);
   const [cart, setCart] = useState<Record<number, number>>({});
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [openCat, setOpenCat] = useState<string | null>(null);
+  const catalogRef = useRef<HTMLDivElement>(null);
 
   const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
     set(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
@@ -90,23 +110,82 @@ const Index = () => {
   return (
     <div className="min-h-screen grid-bg">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="container flex h-16 items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="leading-none">
-              <div className="font-display text-xl font-700 tracking-wide">МЕТАЛЛО<span className="text-primary">РЕЗ</span></div>
-              <div className="font-mono text-[10px] text-muted-foreground">PRECISION TOOLS</div>
+      <header className="sticky top-0 z-40 shadow-md">
+        {/* Верхняя строка — лого + поиск + контакты */}
+        <div className="bg-background border-b border-border">
+          <div className="container flex h-16 items-center gap-4">
+            <div className="flex items-center gap-2 mr-6 shrink-0">
+              <div className="font-display text-2xl font-700 tracking-wide">МЕТАЛЛО<span className="text-primary">РЕЗ</span></div>
+              <div className="font-mono text-[9px] text-muted-foreground leading-tight hidden md:block">PRECISION<br/>TOOLS</div>
             </div>
+            <div className="flex flex-1 items-center gap-2">
+              <Input
+                placeholder="Например, CNMG120408"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="font-mono h-10"
+              />
+              <Button className="shrink-0 h-10 font-display uppercase tracking-wider text-white" style={{background: 'hsl(213 94% 48%)'}}>
+                <Icon name="Search" size={16} /> Найти
+              </Button>
+            </div>
+            <Button variant="outline" className="shrink-0 font-display uppercase tracking-wider hidden md:flex">
+              <Icon name="ShoppingCart" size={16} />
+              {totalQty > 0 ? `Корзина (${totalQty})` : 'Корзина'}
+            </Button>
           </div>
-          <nav className="hidden gap-7 font-display text-sm uppercase tracking-wider text-muted-foreground md:flex">
-            {['Каталог', 'Импорт прайса', 'Калькулятор', 'Доставка', 'Контакты'].map((i) => (
-              <a key={i} href={`#${i}`} className="transition-colors hover:text-foreground">{i}</a>
-            ))}
-          </nav>
-          <Button className="font-display uppercase tracking-wider clip-tech text-white" style={{background: 'hsl(213 94% 48%)'}}>
-            <Icon name="ShoppingCart" size={16} />
-            {totalQty > 0 ? `${totalQty} шт` : 'Корзина'}
-          </Button>
+        </div>
+        {/* Нижняя строка — кнопка Продукция + меню */}
+        <div className="bg-card border-b border-border">
+          <div className="container flex items-center h-12 gap-0">
+            {/* Кнопка Продукция */}
+            <div className="relative" ref={catalogRef}>
+              <button
+                onClick={() => setCatalogOpen((v) => !v)}
+                className="flex items-center gap-2 h-12 px-5 font-display text-sm uppercase tracking-wider text-white transition-colors"
+                style={{background: 'hsl(213 94% 48%)'}}
+              >
+                <Icon name="Menu" size={18} /> Продукция
+              </button>
+              {/* Выпадающее меню каталога */}
+              {catalogOpen && (
+                <div className="absolute left-0 top-full z-50 w-72 border border-border bg-card shadow-xl">
+                  {CATALOG_MENU.map((cat) => (
+                    <div key={cat.label}>
+                      <button
+                        className="flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-sm font-600 uppercase tracking-wide hover:bg-primary/10 hover:text-primary transition-colors"
+                        onClick={() => setOpenCat(openCat === cat.label ? null : cat.label)}
+                      >
+                        {cat.label}
+                        {cat.sub.length > 0 && <Icon name="Plus" size={14} className="text-primary shrink-0" />}
+                      </button>
+                      {cat.sub.length > 0 && openCat === cat.label && (
+                        <div className="border-t border-border/40 bg-background/60">
+                          {cat.sub.map((s) => (
+                            <a key={s} href="#Каталог" className="block px-6 py-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+                              onClick={() => { setCatalogOpen(false); }}>
+                              — {s}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {/* Верхнее меню */}
+            <nav className="hidden md:flex items-center ml-4 gap-0">
+              {TOP_NAV.map((item, i) => (
+                <span key={item} className="flex items-center">
+                  {i > 0 && <span className="text-border mx-1">|</span>}
+                  <a href={`#${item}`} className="px-3 font-display text-sm uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground">
+                    {item}
+                  </a>
+                </span>
+              ))}
+            </nav>
+          </div>
         </div>
       </header>
 
@@ -148,67 +227,56 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Каталог + фильтр */}
-      <section id="Каталог" className="container py-16">
+      {/* Каталог + боковое меню */}
+      <section id="Каталог" className="container py-12">
         <div className="mb-6 flex items-end justify-between">
           <h2 className="font-display text-3xl font-700 uppercase tracking-wide md:text-4xl">Каталог</h2>
           <div className="font-mono text-sm text-muted-foreground">найдено: {filtered.length}</div>
         </div>
 
-        {/* Подразделы */}
-        <div className="mb-8 flex flex-wrap gap-2">
-          {[
-            { label: 'Все', value: '' },
-            { label: 'Фрезы', value: 'Фреза' },
-            { label: 'Сверла', value: 'Сверло' },
-            { label: 'Токарные пластины', value: 'Токарный инструмент' },
-            { label: 'Резьбовые пластины', value: 'Резьбовой инструмент' },
-            { label: 'Канавочный инструмент', value: 'Канавочный инструмент' },
-            { label: 'Автоматы прод. точения', value: 'Инструмент для автоматов продольного точения' },
-          ].map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setTypes(tab.value ? [tab.value] : [])}
-              className={`rounded-full border px-4 py-1.5 font-display text-sm uppercase tracking-wider transition-all ${
-                (tab.value === '' && types.length === 0) || types[0] === tab.value
-                  ? 'border-transparent text-white'
-                  : 'border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground'
-              }`}
-              style={(tab.value === '' && types.length === 0) || types[0] === tab.value ? {background: 'hsl(213 94% 48%)'} : {}}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-          {/* Фильтр */}
-          <aside className="h-fit rounded-lg border border-border bg-card p-5 lg:sticky lg:top-20">
-            <div className="mb-5 flex items-center gap-2 font-display uppercase tracking-wider">
-              <Icon name="SlidersHorizontal" size={18} className="text-primary" /> Фильтр подбора
+        <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+          {/* Боковое меню категорий */}
+          <aside className="h-fit lg:sticky lg:top-28">
+            <div className="border border-border rounded-lg overflow-hidden bg-card">
+              <div className="px-4 py-2.5 font-display text-xs uppercase tracking-wider text-muted-foreground bg-background/60 border-b border-border">
+                Продукция
+              </div>
+              {CATALOG_MENU.map((cat) => (
+                <div key={cat.label} className="border-b border-border/50 last:border-0">
+                  <button
+                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-sm font-600 transition-colors hover:bg-primary/10 hover:text-primary ${openCat === cat.label ? 'text-primary bg-primary/5' : ''}`}
+                    onClick={() => setOpenCat(openCat === cat.label ? null : cat.label)}
+                  >
+                    {cat.label}
+                    {cat.sub.length > 0 && (
+                      <Icon name={openCat === cat.label ? 'Minus' : 'Plus'} size={14} className="text-primary shrink-0" />
+                    )}
+                  </button>
+                  {cat.sub.length > 0 && openCat === cat.label && (
+                    <div className="bg-background/40">
+                      {cat.sub.map((s) => (
+                        <div key={s} className="flex items-center gap-2 px-5 py-1.5 font-mono text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors">
+                          <span className="text-primary">—</span> {s}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-            <Input placeholder="Поиск по названию / артикулу" value={search} onChange={(e) => setSearch(e.target.value)} className="mb-5 font-mono" />
 
-            <FilterGroup title="Тип" items={TYPES} selected={types} onToggle={(v) => toggle(types, setTypes, v)} />
-            <FilterGroup title="Производитель" items={BRANDS} selected={brands} onToggle={(v) => toggle(brands, setBrands, v)} />
-
-            <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
-              <span>Диаметр, мм</span>
-              <span className="font-mono text-foreground">{diameter[0]}–{diameter[1]}</span>
+            {/* Фильтры под боковым меню */}
+            <div className="mt-4 rounded-lg border border-border bg-card p-4">
+              <div className="mb-3 flex items-center gap-2 font-display text-xs uppercase tracking-wider text-muted-foreground">
+                <Icon name="SlidersHorizontal" size={14} className="text-primary" /> Фильтр
+              </div>
+              <FilterGroup title="Производитель" items={BRANDS} selected={brands} onToggle={(v) => toggle(brands, setBrands, v)} />
+              <div className="mb-2 mt-4 flex items-center justify-between font-display text-xs uppercase tracking-wider text-muted-foreground">
+                <span>Диаметр, мм</span>
+                <span className="font-mono text-foreground">{diameter[0]}–{diameter[1]}</span>
+              </div>
+              <Slider min={0} max={20} step={0.5} value={diameter} onValueChange={setDiameter} className="mt-2" />
             </div>
-            <Slider min={0} max={20} step={0.5} value={diameter} onValueChange={setDiameter} className="mt-3" />
-
-            <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
-              <span>Рабочая длина, мм</span>
-              <span className="font-mono text-foreground">{workLen[0]}–{workLen[1]}</span>
-            </div>
-            <Slider min={5} max={300} step={1} value={workLen} onValueChange={setWorkLen} className="mt-3" />
-
-            <div className="mb-2 mt-5 flex items-center justify-between font-display text-sm uppercase tracking-wider text-muted-foreground">
-              <span>Общая длина, мм</span>
-              <span className="font-mono text-foreground">{totalLen[0]}–{totalLen[1]}</span>
-            </div>
-            <Slider min={30} max={500} step={1} value={totalLen} onValueChange={setTotalLen} className="mt-3" />
           </aside>
 
           {/* Карточки */}
