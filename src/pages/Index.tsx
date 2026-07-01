@@ -32,18 +32,91 @@ const PRODUCTS: Product[] = [
 ];
 
 const CATALOG_MENU = [
-  { label: 'Токарная обработка', sub: ['Наружное и внутреннее точение (ISO)', 'Отрезка и обработка канавок', 'Инструмент для ЖД колес'] },
-  { label: 'Точение резьбы', sub: [] },
-  { label: 'Для автоматов продольного точения', sub: [] },
-  { label: 'Минирезцы', sub: [] },
-  { label: 'Сверление', sub: [] },
-  { label: 'Станочная оснастка', sub: [] },
-  { label: 'Фрезы с СМП', sub: [] },
-  { label: 'Твердосплавные фрезы', sub: [] },
-  { label: 'Расточные системы', sub: [] },
-  { label: 'Метчики, резьбофрезы, раскатники', sub: [] },
-  { label: 'Специнструмент', sub: [] },
-  { label: 'Твердосплавные столбики', sub: [] },
+  {
+    label: 'Токарная обработка',
+    sub: [
+      { label: 'Наружное и внутреннее точение (ISO)', sub: [] },
+      { label: 'Отрезка и обработка канавок', sub: [] },
+      { label: 'Инструмент для ЖД колес', sub: [] },
+    ],
+  },
+  {
+    label: 'Точение резьбы',
+    sub: [
+      { label: 'Резьбовые пластины', sub: [] },
+      { label: 'Державки наружные', sub: [] },
+      { label: 'Державки внутренние', sub: [] },
+      { label: 'Комплектующие', sub: [] },
+    ],
+  },
+  {
+    label: 'Для автоматов продольного точения',
+    sub: [
+      { label: 'Пластины', sub: [] },
+      { label: 'Державки', sub: [] },
+    ],
+  },
+  {
+    label: 'Минирезцы',
+    sub: [
+      { label: 'Расточные', sub: [] },
+      { label: 'Резьбовые', sub: [] },
+      { label: 'Канавочные', sub: [] },
+    ],
+  },
+  {
+    label: 'Сверление',
+    sub: [
+      { label: 'Расточные сверла', sub: [] },
+      { label: 'Сверла со сменными пластинами', sub: [] },
+      { label: 'Сверла со сменными головками', sub: [] },
+      { label: 'Сверление больших диаметров', sub: [] },
+      { label: 'Твердосплавные сверла', sub: [] },
+      { label: 'Сверла HSS-Co', sub: [] },
+      { label: 'Центровочные HSSE', sub: [] },
+    ],
+  },
+  {
+    label: 'Станочная оснастка',
+    sub: [
+      { label: 'Оправки BT', sub: [] },
+      { label: 'Оправки SK', sub: [] },
+      { label: 'Оправки HSK', sub: [] },
+      { label: 'Оправки ISO (NT)', sub: [] },
+      { label: 'Цилиндрический хвостовик', sub: [] },
+      { label: 'Конус Морзе', sub: [] },
+      { label: 'Цанги', sub: [] },
+      { label: 'Вспомогательный инструмент', sub: [] },
+      { label: 'Комплектующие', sub: [] },
+      { label: 'Втулки переходные токарные', sub: [] },
+      { label: 'Центры вращающиеся', sub: [] },
+      { label: 'Токарные кулачки', sub: [] },
+    ],
+  },
+  {
+    label: 'Фрезы с СМП',
+    sub: [],
+  },
+  {
+    label: 'Твердосплавные фрезы',
+    sub: [],
+  },
+  {
+    label: 'Расточные системы',
+    sub: [],
+  },
+  {
+    label: 'Метчики, резьбофрезы, раскатники',
+    sub: [],
+  },
+  {
+    label: 'Специнструмент',
+    sub: [],
+  },
+  {
+    label: 'Твердосплавные столбики',
+    sub: [],
+  },
 ];
 
 const TOP_NAV = ['О компании', 'Новинки', 'Вакансии', 'Тех. информация', 'Видео', 'Контакты'];
@@ -149,22 +222,22 @@ const Index = () => {
               </button>
               {/* Выпадающее меню каталога */}
               {catalogOpen && (
-                <div className="absolute left-0 top-full z-50 w-72 border border-border bg-card shadow-xl">
+                <div className="absolute left-0 top-full z-50 w-72 border border-border bg-card shadow-xl max-h-[80vh] overflow-y-auto">
                   {CATALOG_MENU.map((cat) => (
-                    <div key={cat.label}>
+                    <div key={cat.label} className="border-b border-border/40 last:border-0">
                       <button
                         className="flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-sm font-600 uppercase tracking-wide hover:bg-primary/10 hover:text-primary transition-colors"
                         onClick={() => setOpenCat(openCat === cat.label ? null : cat.label)}
                       >
                         {cat.label}
-                        {cat.sub.length > 0 && <Icon name="Plus" size={14} className="text-primary shrink-0" />}
+                        {cat.sub.length > 0 && <Icon name={openCat === cat.label ? 'Minus' : 'Plus'} size={14} className="text-primary shrink-0" />}
                       </button>
                       {cat.sub.length > 0 && openCat === cat.label && (
-                        <div className="border-t border-border/40 bg-background/60">
+                        <div className="bg-background/60">
                           {cat.sub.map((s) => (
-                            <a key={s} href="#Каталог" className="block px-6 py-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+                            <a key={s.label} href="#Каталог" className="block px-6 py-1.5 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
                               onClick={() => { setCatalogOpen(false); }}>
-                              — {s}
+                              — {s.label}
                             </a>
                           ))}
                         </div>
@@ -255,8 +328,8 @@ const Index = () => {
                   {cat.sub.length > 0 && openCat === cat.label && (
                     <div className="bg-background/40">
                       {cat.sub.map((s) => (
-                        <div key={s} className="flex items-center gap-2 px-5 py-1.5 font-mono text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors">
-                          <span className="text-primary">—</span> {s}
+                        <div key={s.label} className="flex items-center gap-2 px-5 py-1.5 font-mono text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors">
+                          <span className="text-primary shrink-0">—</span> {s.label}
                         </div>
                       ))}
                     </div>
