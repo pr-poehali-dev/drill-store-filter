@@ -93,9 +93,6 @@ const Index = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded" style={{background: 'hsl(213 94% 48%)'}}>
-              <Icon name="Drill" size={20} className="text-white" />
-            </div>
             <div className="leading-none">
               <div className="font-display text-xl font-700 tracking-wide">МЕТАЛЛО<span className="text-primary">РЕЗ</span></div>
               <div className="font-mono text-[10px] text-muted-foreground">PRECISION TOOLS</div>
